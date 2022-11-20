@@ -72,8 +72,12 @@ subprojects {
   }
 
   the<io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension>().apply {
+
+    val cucumberVersion: String by project
+
     imports {
       mavenBom(SpringBootPlugin.BOM_COORDINATES)
+      mavenBom("io.cucumber:cucumber-bom:$cucumberVersion")
     }
   }
 }
