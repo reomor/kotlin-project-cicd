@@ -12,11 +12,24 @@ plugins {
   id("org.owasp.dependencycheck")
   jacoco
   id("com.github.ben-manes.versions")
+  checkstyle
 }
 
 java {
   sourceCompatibility = JavaVersion.VERSION_17
   targetCompatibility = JavaVersion.VERSION_17
+}
+
+jacoco {
+  val jacocoVersion: String by project
+  toolVersion = jacocoVersion
+}
+
+// JAVA only
+checkstyle {
+  val checkstyleVersion: String by project
+  toolVersion = checkstyleVersion
+  configFile = file("${project.rootDir}/ci/checkstyle/google_checks.xml")
 }
 
 group = "com.github.reomor"
@@ -39,6 +52,7 @@ allprojects {
   apply(plugin = "org.owasp.dependencycheck")
   apply(plugin = "jacoco")
   apply(plugin = "com.github.ben-manes.versions")
+  apply(plugin = "checkstyle")
 
   repositories {
     mavenCentral()
@@ -46,9 +60,6 @@ allprojects {
 
   dependencyCheck {
     suppressionFile = "ci/owasp-exclusions.xml"
-  }
-
-  jacoco {
   }
 
   tasks.withType<DependencyUpdatesTask> {
@@ -75,6 +86,11 @@ allprojects {
         }
       }
     }
+  }
+
+  tasks.withType<Checkstyle> {
+    setIncludes(setOf("**/*.java"))
+    setExcludes(setOf("**/generated/**"))
   }
 
   configurations.all {
