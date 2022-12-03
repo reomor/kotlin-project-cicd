@@ -1,4 +1,7 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
@@ -14,6 +17,7 @@ plugins {
   id("com.github.ben-manes.versions")
   checkstyle
   id("org.jlleitschuh.gradle.ktlint")
+  id("io.gitlab.arturbosch.detekt")
 }
 
 java {
@@ -31,6 +35,10 @@ checkstyle {
   val checkstyleVersion: String by project
   toolVersion = checkstyleVersion
   configFile = file("${project.rootDir}/ci/checkstyle/google_checks.xml")
+}
+
+val detektReportMergeHtml by tasks.registering(ReportMergeTask::class) {
+  output.set(rootProject.layout.buildDirectory.file("reports/detekt/merge.html"))
 }
 
 group = "com.github.reomor"
@@ -55,6 +63,7 @@ allprojects {
   apply(plugin = "com.github.ben-manes.versions")
   apply(plugin = "checkstyle")
   apply(plugin = "org.jlleitschuh.gradle.ktlint")
+  apply(plugin = "io.gitlab.arturbosch.detekt")
 
   repositories {
     mavenCentral()
@@ -62,6 +71,13 @@ allprojects {
 
   dependencyCheck {
     suppressionFile = "ci/owasp-exclusions.xml"
+  }
+
+  detekt {
+    buildUponDefaultConfig = true
+    allRules = false
+    config = files("${rootProject.projectDir}/ci/detekt/detekt.yml")
+    baseline = file("${rootProject.projectDir}/ci/detekt/baseline.xml")
   }
 
   tasks.withType<DependencyUpdatesTask> {
@@ -93,6 +109,27 @@ allprojects {
   tasks.withType<Checkstyle> {
     setIncludes(setOf("**/*.java"))
     setExcludes(setOf("**/generated/**"))
+  }
+
+  tasks.withType<Detekt>() detekt@{
+    jvmTarget = "1.8"
+    reports {
+      xml.required.set(true)
+      html.required.set(true)
+      txt.required.set(true)
+      sarif.required.set(true)
+      md.required.set(true)
+    }
+    basePath = rootProject.projectDir.absolutePath
+    finalizedBy(detektReportMergeHtml)
+    detektReportMergeHtml.configure {
+      input.setFrom(sarifReportFile)
+      input.from(this@detekt.sarifReportFile)
+    }
+  }
+
+  tasks.withType<DetektCreateBaselineTask>().configureEach {
+    jvmTarget = "1.8"
   }
 
   configurations.all {

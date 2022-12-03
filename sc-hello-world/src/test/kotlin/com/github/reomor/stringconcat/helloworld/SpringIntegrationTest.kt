@@ -5,7 +5,7 @@ import org.springframework.test.web.reactive.server.EntityExchangeResult
 import org.springframework.test.web.reactive.server.WebTestClient
 import kotlin.reflect.KClass
 
-abstract class SpringIntegrationTest {
+open class SpringIntegrationTest {
 
   @Autowired
   lateinit var webTestClient: WebTestClient

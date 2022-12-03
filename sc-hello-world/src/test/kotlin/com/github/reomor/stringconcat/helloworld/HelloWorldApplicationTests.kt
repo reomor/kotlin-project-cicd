@@ -6,5 +6,6 @@ class HelloWorldApplicationTests {
 
   @Test
   fun contextLoads() {
+    /* try to start the context */
   }
 }

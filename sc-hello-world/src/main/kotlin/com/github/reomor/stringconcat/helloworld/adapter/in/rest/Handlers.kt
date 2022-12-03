@@ -12,7 +12,7 @@ class Handlers {
     const val MESSAGE = "Hello world"
   }
 
-  suspend fun pull(request: ServerRequest): ServerResponse {
+  suspend fun pull(ignored: ServerRequest): ServerResponse {
 
     return ServerResponse.ok()
       .bodyValue(MESSAGE)
