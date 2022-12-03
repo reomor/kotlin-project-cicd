@@ -18,6 +18,7 @@ plugins {
   checkstyle
   id("org.jlleitschuh.gradle.ktlint")
   id("io.gitlab.arturbosch.detekt")
+  pmd
 }
 
 java {
@@ -35,6 +36,13 @@ checkstyle {
   val checkstyleVersion: String by project
   toolVersion = checkstyleVersion
   configFile = file("${project.rootDir}/ci/checkstyle/google_checks.xml")
+}
+
+pmd {
+  val pmdVersion: String by project
+  toolVersion = pmdVersion
+  isConsoleOutput = true
+  rulesMinimumPriority.set(5)
 }
 
 val detektReportMergeHtml by tasks.registering(ReportMergeTask::class) {
@@ -64,6 +72,7 @@ allprojects {
   apply(plugin = "checkstyle")
   apply(plugin = "org.jlleitschuh.gradle.ktlint")
   apply(plugin = "io.gitlab.arturbosch.detekt")
+  apply(plugin = "pmd")
 
   repositories {
     mavenCentral()
@@ -203,6 +212,8 @@ subprojects {
   tasks {
     check {
       dependsOn(jacocoTestCoverageVerification)
+      dependsOn(pmdMain)
+      dependsOn(pmdTest)
       dependsOn(dependencyCheckAnalyze)
       dependsOn(dependencyUpdates)
     }
