@@ -1,3 +1,4 @@
+import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
@@ -7,6 +8,7 @@ plugins {
   id("java")
   kotlin("jvm")
   kotlin("plugin.spring")
+  id("org.owasp.dependencycheck")
 }
 
 java {
@@ -31,9 +33,35 @@ allprojects {
   apply<JavaPlugin>()
   apply(plugin = "java")
   apply(plugin = "io.spring.dependency-management")
+  apply(plugin = "org.owasp.dependencycheck")
 
   repositories {
     mavenCentral()
+  }
+
+  dependencyCheck {
+    suppressionFile = "ci/owasp-exclusions.xml"
+  }
+
+  configurations.all {
+
+    resolutionStrategy {
+
+      eachDependency {
+
+        val snakeYmlDependencyModule = libs.snakeyaml.trouble.get().module
+        val springWebDependencyModule = libs.spring.web.trouble.get().module
+
+        val versionSelector = this.requested
+        if (versionSelector.group == snakeYmlDependencyModule.group && versionSelector.name == snakeYmlDependencyModule.name) {
+          this.useVersion(libs.versions.snakeyaml.get())
+        }
+
+        if (versionSelector.group == springWebDependencyModule.group && versionSelector.name == springWebDependencyModule.name) {
+          this.useVersion(libs.versions.spring.web.get())
+        }
+      }
+    }
   }
 
   gradle.projectsEvaluated {
@@ -71,13 +99,19 @@ subprojects {
     options.encoding = "UTF-8"
   }
 
-  the<io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension>().apply {
+  the<DependencyManagementExtension>().apply {
 
     val cucumberVersion: String by project
 
     imports {
       mavenBom(SpringBootPlugin.BOM_COORDINATES)
       mavenBom("io.cucumber:cucumber-bom:$cucumberVersion")
+    }
+  }
+
+  tasks {
+    check {
+      dependsOn(dependencyCheckAnalyze)
     }
   }
 }
