@@ -37,9 +37,11 @@ dependencyResolutionManagement {
 
       version("snakeyaml", "1.33")
       version("spring-web", "5.3.24")
+      version("commons-io", "2.11.0")
 
       library("snakeyaml-trouble", "org.yaml", "snakeyaml").versionRef("snakeyaml")
       library("spring-web-trouble", "org.springframework", "spring-web").versionRef("spring-web")
+      library("commons-io-trouble", "commons-io", "commons-io").versionRef("commons-io")
     }
   }
 }

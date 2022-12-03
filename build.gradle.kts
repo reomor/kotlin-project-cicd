@@ -147,6 +147,7 @@ allprojects {
 
         val snakeYmlDependencyModule = libs.snakeyaml.trouble.get().module
         val springWebDependencyModule = libs.spring.web.trouble.get().module
+        val commonsIoDependencyModule = libs.commons.io.trouble.get().module
 
         val versionSelector = this.requested
         if (versionSelector.group == snakeYmlDependencyModule.group &&
@@ -159,6 +160,12 @@ allprojects {
           versionSelector.name == springWebDependencyModule.name
         ) {
           this.useVersion(libs.versions.spring.web.get())
+        }
+
+        if (versionSelector.group == commonsIoDependencyModule.group &&
+          versionSelector.name == commonsIoDependencyModule.name
+        ) {
+          this.useVersion(libs.versions.commons.io.get())
         }
       }
     }
