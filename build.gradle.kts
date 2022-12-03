@@ -9,6 +9,7 @@ plugins {
   kotlin("jvm")
   kotlin("plugin.spring")
   id("org.owasp.dependencycheck")
+  jacoco
 }
 
 java {
@@ -34,6 +35,7 @@ allprojects {
   apply(plugin = "java")
   apply(plugin = "io.spring.dependency-management")
   apply(plugin = "org.owasp.dependencycheck")
+  apply(plugin = "jacoco")
 
   repositories {
     mavenCentral()
@@ -43,10 +45,11 @@ allprojects {
     suppressionFile = "ci/owasp-exclusions.xml"
   }
 
+  jacoco {
+  }
+
   configurations.all {
-
     resolutionStrategy {
-
       eachDependency {
 
         val snakeYmlDependencyModule = libs.snakeyaml.trouble.get().module
@@ -111,6 +114,7 @@ subprojects {
 
   tasks {
     check {
+      dependsOn(jacocoTestCoverageVerification)
       dependsOn(dependencyCheckAnalyze)
     }
   }

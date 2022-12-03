@@ -5,6 +5,7 @@ pluginManagement {
   val kotlinVersion: String by settings
   val kotlinSpringVersion: String by settings
   val owaspDependencyCheckVersion: String by settings
+  val jacocoVersion: String by settings
 
   repositories {
     maven(url = uri("https://plugins.gradle.org/m2/"))
@@ -18,6 +19,7 @@ pluginManagement {
     id("io.spring.dependency-management") version springDependencyManagementVersion
     kotlin("plugin.spring") version kotlinSpringVersion
     id("org.owasp.dependencycheck") version owaspDependencyCheckVersion
+    id("jacoco") version jacocoVersion
   }
 }
 
@@ -37,5 +39,6 @@ dependencyResolutionManagement {
 rootProject.name = "stringconcat"
 
 include(
+  "code-coverage-report",
   "sc-hello-world"
 )
