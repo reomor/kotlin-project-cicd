@@ -6,6 +6,7 @@ pluginManagement {
   val kotlinSpringVersion: String by settings
   val owaspDependencyCheckVersion: String by settings
   val jacocoVersion: String by settings
+  val gradleVersionsPluginVersion: String by settings
 
   repositories {
     maven(url = uri("https://plugins.gradle.org/m2/"))
@@ -20,6 +21,7 @@ pluginManagement {
     kotlin("plugin.spring") version kotlinSpringVersion
     id("org.owasp.dependencycheck") version owaspDependencyCheckVersion
     id("jacoco") version jacocoVersion
+    id("com.github.ben-manes.versions") version gradleVersionsPluginVersion
   }
 }
 
