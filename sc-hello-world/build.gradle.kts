@@ -19,8 +19,13 @@ dependencies {
   testImplementation("org.springframework.boot:spring-boot-starter-test")
   testImplementation("org.junit.jupiter:junit-jupiter-api")
   testImplementation("org.mockito:mockito-core")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
   testImplementation("io.projectreactor:reactor-test")
+  testImplementation("org.junit.platform:junit-platform-suite")
+
+  testImplementation("io.cucumber:cucumber-java")
+  testImplementation("io.cucumber:cucumber-java8")
+  testImplementation("io.cucumber:cucumber-spring")
+  testImplementation("io.cucumber:cucumber-junit-platform-engine")
 }
 
 tasks {
