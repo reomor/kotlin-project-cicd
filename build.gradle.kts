@@ -13,6 +13,7 @@ plugins {
   jacoco
   id("com.github.ben-manes.versions")
   checkstyle
+  id("org.jlleitschuh.gradle.ktlint")
 }
 
 java {
@@ -53,6 +54,7 @@ allprojects {
   apply(plugin = "jacoco")
   apply(plugin = "com.github.ben-manes.versions")
   apply(plugin = "checkstyle")
+  apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
   repositories {
     mavenCentral()
@@ -101,11 +103,15 @@ allprojects {
         val springWebDependencyModule = libs.spring.web.trouble.get().module
 
         val versionSelector = this.requested
-        if (versionSelector.group == snakeYmlDependencyModule.group && versionSelector.name == snakeYmlDependencyModule.name) {
+        if (versionSelector.group == snakeYmlDependencyModule.group &&
+          versionSelector.name == snakeYmlDependencyModule.name
+        ) {
           this.useVersion(libs.versions.snakeyaml.get())
         }
 
-        if (versionSelector.group == springWebDependencyModule.group && versionSelector.name == springWebDependencyModule.name) {
+        if (versionSelector.group == springWebDependencyModule.group &&
+          versionSelector.name == springWebDependencyModule.name
+        ) {
           this.useVersion(libs.versions.spring.web.get())
         }
       }

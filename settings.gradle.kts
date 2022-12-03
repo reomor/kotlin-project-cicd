@@ -7,6 +7,7 @@ pluginManagement {
   val owaspDependencyCheckVersion: String by settings
   val jacocoVersion: String by settings
   val gradleVersionsPluginVersion: String by settings
+  val klintVersion: String by settings
 
   repositories {
     maven(url = uri("https://plugins.gradle.org/m2/"))
@@ -15,13 +16,14 @@ pluginManagement {
   }
 
   plugins {
-    kotlin("jvm") version kotlinVersion //apply false
+    kotlin("jvm") version kotlinVersion // apply false
     id("org.springframework.boot") version springBootVersion
     id("io.spring.dependency-management") version springDependencyManagementVersion
     kotlin("plugin.spring") version kotlinSpringVersion
     id("org.owasp.dependencycheck") version owaspDependencyCheckVersion
     id("jacoco") version jacocoVersion
     id("com.github.ben-manes.versions") version gradleVersionsPluginVersion
+    id("org.jlleitschuh.gradle.ktlint") version klintVersion
   }
 }
 
