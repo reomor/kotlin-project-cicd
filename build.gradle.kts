@@ -195,6 +195,16 @@ subprojects {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
   }
 
+  tasks.jacocoTestCoverageVerification {
+    violationRules {
+      rule {
+        limit {
+          minimum = "0.8".toBigDecimal()
+        }
+      }
+    }
+  }
+
   tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
   }
