@@ -8,9 +8,17 @@
 - SCH-2 Разработка тестов к приложению
 - SCH-3 Добавление проверки зависимостей OWASP-уязвимостям
 - SCH-4 JavaCodeCoverage отчет
+- SCH-5 Проверка доступности обновлений и финальности для пакетов
 
 ## Развертывание
 
 ## Проверки
 
+- Проверка наличия критических известных уязвимостей в зависимостях [owasp-dependency-checker](https://owasp.org/www-project-dependency-check/)
+- Построение отчета о тестировании и покрытии [jacoco](https://docs.gradle.org/current/userguide/jacoco_plugin.html)
+- Проверка наличия обновлений для пакетов [gradle-versions-plugin](https://github.com/ben-manes/gradle-versions-plugin)
+
 ## Стек
+
+- Kotlin/Java 17
+- SpringBoot 2.7.3

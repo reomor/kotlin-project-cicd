@@ -1,3 +1,4 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
@@ -10,6 +11,7 @@ plugins {
   kotlin("plugin.spring")
   id("org.owasp.dependencycheck")
   jacoco
+  id("com.github.ben-manes.versions")
 }
 
 java {
@@ -36,6 +38,7 @@ allprojects {
   apply(plugin = "io.spring.dependency-management")
   apply(plugin = "org.owasp.dependencycheck")
   apply(plugin = "jacoco")
+  apply(plugin = "com.github.ben-manes.versions")
 
   repositories {
     mavenCentral()
@@ -46,6 +49,32 @@ allprojects {
   }
 
   jacoco {
+  }
+
+  tasks.withType<DependencyUpdatesTask> {
+
+    revision = "release"
+
+    fun isNonStable(version: String): Boolean {
+      val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.toUpperCase().contains(it) }
+      val regex = "^[0-9,.v-]+(-r)?$".toRegex()
+      val isStable = stableKeyword || regex.matches(version)
+      return isStable.not()
+    }
+
+    rejectVersionIf {
+      isNonStable(candidate.version)
+    }
+
+    resolutionStrategy {
+      componentSelection {
+        all {
+          if (isNonStable(candidate.version) && !isNonStable(currentVersion)) {
+            reject("Release candidate")
+          }
+        }
+      }
+    }
   }
 
   configurations.all {
@@ -116,6 +145,7 @@ subprojects {
     check {
       dependsOn(jacocoTestCoverageVerification)
       dependsOn(dependencyCheckAnalyze)
+      dependsOn(dependencyUpdates)
     }
   }
 }
