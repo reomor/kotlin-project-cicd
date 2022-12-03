@@ -8,6 +8,7 @@ pluginManagement {
   val jacocoVersion: String by settings
   val gradleVersionsPluginVersion: String by settings
   val klintVersion: String by settings
+  val detektVersion: String by settings
 
   repositories {
     maven(url = uri("https://plugins.gradle.org/m2/"))
@@ -24,6 +25,7 @@ pluginManagement {
     id("jacoco") version jacocoVersion
     id("com.github.ben-manes.versions") version gradleVersionsPluginVersion
     id("org.jlleitschuh.gradle.ktlint") version klintVersion
+    id("io.gitlab.arturbosch.detekt") version detektVersion
   }
 }
 
