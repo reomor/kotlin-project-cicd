@@ -37,6 +37,8 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: test-report
-          path: | 
-            sc-hello-world/build/reports
-            code-coverage-report/build/reports
+          path: '**/build/'
+#          path: |
+#            sc-hello-world/build/reports
+#            code-coverage-report/build/reports
+          if-no-files-found: error
