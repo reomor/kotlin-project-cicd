@@ -1,5 +1,7 @@
 # Демонстрационное приложение с интеграцией проверок в CI/CD
 
+[![CI Build](https://github.com/reomor/kotlin-project-cicd/actions/workflows/build.yml/badge.svg)](https://github.com/reomor/kotlin-project-cicd/actions/workflows/build.yml)
+
 ## Описание
 
 ## Задачи
@@ -13,6 +15,7 @@
 - SCH-7 Добавление проверки стиля Kotlin
 - SCH-8 Статический анализ Kotlin с Detekt
 - SCH-9 Статический анализ Kotlin с PMD
+- SCH-10 Добавление CI в Github Actions
 
 ## Развертывание
 
@@ -30,3 +33,4 @@
 
 - Kotlin/Java 17
 - SpringBoot 2.7.3
+- Cucumber

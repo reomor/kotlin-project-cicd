@@ -1,0 +1,66 @@
+name: CI Build
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Gradle packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        with:
+          arguments: build
+      - name: Archive code coverage results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: '${{ github.workspace }}/**/build/'
+          #          path: |
+          #            sc-hello-world/build/reports
+          #            code-coverage-report/build/reports
+          if-no-files-found: error
+      - name: Analyze with SonarCloud
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          # for some reasons falls with 'java not found'
+          JAVA_HOME: ''
+        with:
+          args: >
+            -Dsonar.organization=reomor
+            -Dsonar.projectKey=reomor_kotlin-project-cicd
+            -Dsonar.coverage.jacoco.xmlReportPaths=code-coverage-report/build/reports/jacoco/codeCoverageReport/codeCoverageReport.xml
+            -Dsonar.verbose=true
+            -Dsonar.test.inclusions=**/src/test/**/*,**/src/*Test/**/*
