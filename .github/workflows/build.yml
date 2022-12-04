@@ -27,8 +27,14 @@ jobs:
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
         with:
           arguments: build
+
+  publish_test:
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: build
+    steps:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v3
         with:
           name: test-report
-          path: code-coverage-report/build/reports/jacoco/testCodeCoverageReport/html/index.html
+          path: /home/runner/work/kotlin-project-cicd/kotlin-project-cicd/code-coverage-report/build/reports/jacoco/testCodeCoverageReport/html/index.html
