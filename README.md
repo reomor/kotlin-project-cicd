@@ -1,6 +1,6 @@
 # Демонстрационное приложение с интеграцией проверок в CI/CD
 
-[![CI Build](https://github.com/reomor/kotlin-project-cicd/actions/workflows/build.yml/badge.svg)](https://github.com/reomor/kotlin-project-cicd/actions/workflows/build.yml)
+[![CI Build](https://github.com/reomor/kotlin-project-cicd/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/reomor/kotlin-project-cicd/actions/workflows/build.yml)
 
 ## Описание
 
