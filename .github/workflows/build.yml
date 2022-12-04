@@ -27,18 +27,13 @@ jobs:
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
         with:
           arguments: build
-
-  publish_test:
-    runs-on: ubuntu-latest
-    if: ${{ always() }}
-    needs: build
-    steps:
       - name: Archive code coverage results
+        if: ${{ always() }}
         uses: actions/upload-artifact@v3
         with:
           name: test-report
           path: '${{ github.workspace }}/**/build/'
-#          path: |
-#            sc-hello-world/build/reports
-#            code-coverage-report/build/reports
+          #          path: |
+          #            sc-hello-world/build/reports
+          #            code-coverage-report/build/reports
           if-no-files-found: error
