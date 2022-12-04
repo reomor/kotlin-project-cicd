@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: test-report
-          path: '**/build/'
+          path: '${{ github.workspace }}/**/build/'
 #          path: |
 #            sc-hello-world/build/reports
 #            code-coverage-report/build/reports
