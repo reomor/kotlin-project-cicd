@@ -37,4 +37,6 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: test-report
-          path: file:///home/runner/work/kotlin-project-cicd/kotlin-project-cicd/sc-hello-world/build/reports/tests/test/index.html
+          path: | 
+            sc-hello-world/build/reports
+            code-coverage-report/build/reports
