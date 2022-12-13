@@ -16,6 +16,7 @@
 - SCH-8 Статический анализ Kotlin с Detekt
 - SCH-9 Статический анализ Kotlin с PMD
 - SCH-10 Добавление CI в Github Actions
+- SCH-11 Build scripts
 
 ## Развертывание
 
